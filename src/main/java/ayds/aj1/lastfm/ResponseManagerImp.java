@@ -12,11 +12,14 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 class ResponseManagerImp implements ResponseManager{
 
-    public Artist getArtistCardFromResponse(String artistName) throws Exception{
-        NodeList images = parseResponse(artistName).getElementsByTagName("image");
-        NodeList nodesFromResponse = parseResponse(artistName).getElementsByTagName("content");
-        Node extract = nodesFromResponse.item(0);
-        String bio = checkValidation(extract.getTextContent().replace("\\n", "\n"));
+    public Artist getArtistCardFromResponse(String serviceData) throws Exception{
+        NodeList images = parseResponse(serviceData).getElementsByTagName("image");
+        NodeList content = parseResponse(serviceData).getElementsByTagName("content");
+        NodeList name = parseResponse(serviceData).getElementsByTagName("name");
+        Node extractContent = content.item(0);
+        Node extractName = name.item(0);
+        String bio = checkValidation(extractContent.getTextContent().replace("\\n", "\n"));
+        String artistName = checkValidation(extractName.getTextContent().replace("\\n", "\n"));
         String image = checkValidation(lookForPathImage(images));
         return new Artist(artistName, bio, image);
     }
